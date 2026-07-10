@@ -1,0 +1,29 @@
+import {Post} from "../models/post.model.js";
+
+const createPost = async (req, res) => {
+    try {
+        const { name, description, age } = req.body;
+        if(!name || !description || !age) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+        const post = await Post.create({ name, description, age });
+        res.status(201).json({ message: "Post created successfully", post });
+    } catch (error) {
+        console.error("Create post error:", error);
+        res.status(500).json({ message: "Internal server error", error: error.message });
+    }
+};
+
+const getPosts = async (req, res) => {
+    try {
+        const getPosts = await Post.find();
+        res.status(200).json({ message: "Posts fetched successfully", getPosts });
+    } catch (error) {
+        console.error("Get all posts error:", error);
+        res.status(500).json({ message: "Internal server error", error: error.message });
+    }
+}
+export {
+    createPost,
+    getPosts
+}
